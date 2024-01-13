@@ -24,8 +24,7 @@ struct Node {
     d = p = s = min_cost = 0;
   }
   // Normal constructor.
-  Node(const uint64_t &dst, Node *parent_)
-      : d(dst), parent(parent_) {
+  Node(const uint64_t &dst, Node *parent_) : d(dst), parent(parent_) {
     parent->children.push_back(std::move(std::unique_ptr<Node>(this)));
   }
   // This is not needed.
@@ -73,47 +72,49 @@ int main(int argc, char *argv[]) {
   std::vector<Node *> nodes;
 
   unsigned int num = 1;
-    input_file.open(input_path + std::to_string(num) + ext);
-    if (input_file.good()) {
-      input_file >> N;
-      nodes.reserve(N);
-      nodes.resize(N);
-      nodes[0] = root.get();
-      for (int i = 0; i < N - 1; i++) {
-        input_file >> first;
-        input_file >> second;
-        input_file >> dst;
-        unsigned int parent, child;
-        if(first < second) {
-          parent = first - 1;
-          child = second - 1;
-        } else {
-          parent = second - 1;
-          child = first - 1;
-        }
-        if (!nodes[parent]) { // If parent doesn't exist first create a parentless parent.
-          nodes[parent] = new Node();
-        }
-        if (!nodes[child]) { // If the child doesnt exist create one.
-          nodes[child] = new Node(dst,nodes[parent]);
-        } else { // If it does then link the parent.
-          nodes[child]->parent = nodes[parent];
-          nodes[child]->d = dst;
-          nodes[parent]->children.push_back(std::move(std::unique_ptr<Node>(nodes[child])));
-        }
+  input_file.open(input_path + std::to_string(num) + ext);
+  if (input_file.good()) {
+    input_file >> N;
+    nodes.reserve(N);
+    nodes.resize(N);
+    nodes[0] = root.get();
+    for (int i = 0; i < N - 1; i++) {
+      input_file >> first;
+      input_file >> second;
+      input_file >> dst;
+      unsigned int parent, child;
+      if (first < second) {
+        parent = first - 1;
+        child = second - 1;
+      } else {
+        parent = second - 1;
+        child = first - 1;
       }
-      for (int i = 1; i < N; i++) {
-        input_file >> prep;
-        input_file >> spd;
-          nodes[i]->update(prep, spd);
+      if (!nodes[parent]) { // If parent doesn't exist first create a parentless
+                            // parent.
+        nodes[parent] = new Node();
+      }
+      if (!nodes[child]) { // If the child doesnt exist create one.
+        nodes[child] = new Node(dst, nodes[parent]);
+      } else { // If it does then link the parent.
+        nodes[child]->parent = nodes[parent];
+        nodes[child]->d = dst;
+        nodes[parent]->children.push_back(
+            std::move(std::unique_ptr<Node>(nodes[child])));
       }
     }
-    for(size_t i = 1; i < nodes.size(); i++) {
-      for(const auto& child : nodes[i]->children) {
-        child->d += nodes[i]->d;
-      }
+    for (int i = 1; i < N; i++) {
+      input_file >> prep;
+      input_file >> spd;
+      nodes[i]->update(prep, spd);
     }
-    input_file.close();
-    relay(nodes);
+  }
+  for (size_t i = 1; i < nodes.size(); i++) {
+    for (const auto &child : nodes[i]->children) {
+      child->d += nodes[i]->d;
+    }
+  }
+  input_file.close();
+  relay(nodes);
   return 0;
 }
