@@ -8,6 +8,8 @@ i.e. you need to sell a stock before you buy another one.
 - This problem is basically the same as [LeetCode 188](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/description/)
 ## Input
 You are given two positive integers separated by a whitespace. The first one corresponds to the number of days $N$ while the second one corresponds to the maximum number of transactions $K$. On the next line you are given $N$ whitespace-separated numbers which correspond to the prices $p(1),\ldots,p(N)$.
+- Input files: `test_cases/input*.txt`
+- Answers: `test_cases/output*.txt`
 ## Limitations
 - $1\leq N \leq 10^5$
 - $1\leq K\leq 10^3$
