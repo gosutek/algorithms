@@ -18,13 +18,6 @@ auto desync_untie = []() {
 
 typedef pair<uint32_t, uint32_t> uiPair;
 
-struct uiPairHash {
-  size_t operator()(const pair<uint16_t, uint16_t> &p) const {
-    return hash<uint16_t>()(
-        ((p.first + p.second) * (p.first + p.second + 1) / 2) + p.second);
-  }
-};
-
 struct Graph {
   vector<uiPair> *adj_list;
   uint16_t _v;
